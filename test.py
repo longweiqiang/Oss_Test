@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Time    : 2018/7/4 9:18
+# @Author  : Weiqiang.long
+# @Site    : 
+# @File    : test.py
+# @Software: PyCharm
+import json
+
+import oss2
+from flask import Flask, render_template, request, Response
+
+app = Flask(__name__)
+
+
+@app.route("/getossurl", methods=['POST', 'GET'])
+def GetOss():
+    """
+        生成签名URL
+        :param path:文件名
+        :param time:授权有效期,默认授权有效期为四天
+        :return:签名URL
+        """
+
+    MyAccessKeyId = 'XXX'
+    MyAccessKeySecret = 'XXX'
+    MyEndpoint = 'XXX'
+    MyBucketName = 'XXX'
+
+
+    if request.method == "POST":
+        path = request.form.get('path')
+        times = request.form.get('times')
+        times = int(times)
+        # 换算time,用天数乘以86400秒(一天)
+        time = times * 86400
+        # print(times)
+        auth = oss2.Auth(MyAccessKeyId, MyAccessKeySecret)
+        bucket = oss2.Bucket(auth, MyEndpoint, MyBucketName)
+        oss_url = bucket.sign_url('GET', path, time)
+        code = '00'
+        msg = u'请求成功'
+        dict_data = {
+            "code": code,
+            "msg": msg,
+            "url": oss_url
+        }
+        return Response(json.dumps(dict_data), mimetype='application/json')
+
+    if request.method == "GET":
+        path = request.args.get('path')
+        times = request.args.get('times')
+        times = int(times)
+        # 换算time,用天数乘以86400秒(一天)
+        time = times * 86400
+        # print(times)
+        auth = oss2.Auth(MyAccessKeyId, MyAccessKeySecret)
+        bucket = oss2.Bucket(auth, MyEndpoint, MyBucketName)
+        oss_url = bucket.sign_url('GET', path, time)
+        code = '00'
+        msg = u'请求成功'
+        dict_data = {
+            "code": code,
+            "msg": msg,
+            "url": oss_url
+        }
+        return Response(json.dumps(dict_data), mimetype='application/json')
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', debug=True)
