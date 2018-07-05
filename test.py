@@ -22,6 +22,7 @@ def GetOss():
         :return:签名URL
         """
 
+
     MyAccessKeyId = 'XXX'
     MyAccessKeySecret = 'XXX'
     MyEndpoint = 'XXX'
@@ -50,21 +51,44 @@ def GetOss():
     if request.method == "GET":
         path = request.args.get('path')
         times = request.args.get('times')
-        times = int(times)
-        # 换算time,用天数乘以86400秒(一天)
-        time = times * 86400
-        # print(times)
-        auth = oss2.Auth(MyAccessKeyId, MyAccessKeySecret)
-        bucket = oss2.Bucket(auth, MyEndpoint, MyBucketName)
-        oss_url = bucket.sign_url('GET', path, time)
-        code = '00'
-        msg = u'请求成功'
-        dict_data = {
-            "code": code,
-            "msg": msg,
-            "url": oss_url
+        path_error = {
+            "code": 500,
+            "msg": "path参数缺失！"
         }
-        return Response(json.dumps(dict_data), mimetype='application/json')
+        if path == None:
+            return Response(json.dumps(path_error), mimetype='application/json')
+        elif times == None:
+            times = 4
+            # 换算time,用天数乘以86400秒(一天)
+            time = times * 86400
+            # print(times)
+            auth = oss2.Auth(MyAccessKeyId, MyAccessKeySecret)
+            bucket = oss2.Bucket(auth, MyEndpoint, MyBucketName)
+            oss_url = bucket.sign_url('GET', path, time)
+            code = '00'
+            msg = u'请求成功'
+            dict_data = {
+                "code": code,
+                "msg": msg,
+                "url": oss_url
+            }
+            return Response(json.dumps(dict_data), mimetype='application/json')
+        else:
+            times = int(times)
+            # 换算time,用天数乘以86400秒(一天)
+            time = times * 86400
+            # print(times)
+            auth = oss2.Auth(MyAccessKeyId, MyAccessKeySecret)
+            bucket = oss2.Bucket(auth, MyEndpoint, MyBucketName)
+            oss_url = bucket.sign_url('GET', path, time)
+            code = '00'
+            msg = u'请求成功'
+            dict_data = {
+                "code": code,
+                "msg": msg,
+                "url": oss_url
+            }
+            return Response(json.dumps(dict_data), mimetype='application/json')
 
 
 if __name__ == '__main__':
