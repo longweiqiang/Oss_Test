@@ -21,15 +21,10 @@ def GetOss():
         :param time:授权有效期,默认授权有效期为四天
         :return:签名URL
         """
-    # MyAccessKeyId = 'LTAIyxkt6Uz6Lmob'
-    # MyAccessKeySecret = 'GMr5YsbuwPyiluxnclDTbfBRyWXYGl'
-    # MyEndpoint = 'oss-cn-hangzhou.aliyuncs.com'
-    # MyBucketName = 'lwq573925242'
-
-    MyAccessKeyId = 'LTAIGtLs9U0rENY6'
-    MyAccessKeySecret = 'aXsG49CtClh3LRDlLMbdzReDx1gmrq'
-    MyEndpoint = 'oss-cn-hangzhou.aliyuncs.com'
-    MyBucketName = 'xjx-files'
+    MyAccessKeyId = 'XXX'
+    MyAccessKeySecret = 'XXX'
+    MyEndpoint = 'XXX'
+    MyBucketName = 'XXX'
 
 
     if request.method == "POST":
